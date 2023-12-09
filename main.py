@@ -1,7 +1,7 @@
 import spade
 from spade import agent
 from spade.agent import Agent
-from spade.behaviour import CyclicBehaviour, OneShotBehaviour
+from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
 agent1_login = "test_agent@jabb.im"
@@ -29,12 +29,19 @@ class SenderAgent(Agent):
         self.add_behaviour(self.sendingBehaviour)
 
     class SendingBehaviour(CyclicBehaviour):
+        
+        number = 0
 
         async def run(self):
-            
-            msg = create_message(agent1_login, "performative", "inform", f"Hello agent {agent1_login}")
+
+            msg = create_message(agent1_login, "performative", "inform", str(self.number))
             await self.send(msg)
-            print(f"{agent2_login}: Sent message to {agent1_login}")
+            
+            response = await self.receive(timeout=5)
+            if (response):
+
+                print(f"{agent2_login}: Got number {response.body} from {agent1_login}")
+                self.number = response.body
 
 class CounterAgent(Agent):
 
@@ -44,15 +51,15 @@ class CounterAgent(Agent):
 
     class ReceivingBehaviour(CyclicBehaviour):
 
-        counter = 0
-
         async def run(self):
             msg = await self.receive(timeout=5)
 
             if (msg):
 
-                self.counter += 1
-                print(f"{agent1_login}: Got message from {agent2_login}. Number of counted messages: {self.counter}")
+                number = int(msg.body)
+                number += 1
+                msg = create_message(agent2_login, "performative", "inform", str(number))
+                await self.send(msg)
 
 async def main():
 
