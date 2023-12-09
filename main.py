@@ -20,9 +20,6 @@ def create_message(receiver, metadata_key, metadata_value, body):
 
 class SenderAgent(Agent):
 
-    this_agent = agent1_login
-    other_agent = agent2_login
-
     async def setup(self):
         
         self.sendingBehaviour = self.SendingBehaviour()
@@ -42,6 +39,9 @@ class SenderAgent(Agent):
 
                 print(f"{agent2_login}: Got number {response.body} from {agent1_login}")
                 self.number = response.body
+            else:
+
+                await self.agent.stop()
 
 class CounterAgent(Agent):
 
@@ -58,8 +58,12 @@ class CounterAgent(Agent):
 
                 number = int(msg.body)
                 number += 1
-                msg = create_message(agent2_login, "performative", "inform", str(number))
-                await self.send(msg)
+                
+                if (number <= 100):
+                    msg = create_message(agent2_login, "performative", "inform", str(number))
+                    await self.send(msg)
+                else:
+                    await self.agent.stop()
 
 async def main():
 
