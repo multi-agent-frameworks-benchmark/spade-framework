@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  tigase:
+    image: tigase/tigase-xmpp-server:8.1.2
+    ports:
+      - "8080:8080"
+      - "5222:5222"
+    environment:
+      - DB_ROOOT_USER=admin
+      - DB_ROOT_PASS=admin
+      - ADMIN_JID=admin@localhost
+      - ADMIN_PASSWORD=admin
+    volumes:
+      - ./tigase/config/tigase.conf:/home/tigase/tigase-server/etc/tigase.conf
+      - ./tigase/config/config.tdsl:/home/tigase/tigase-server/etc/config.tdsl
