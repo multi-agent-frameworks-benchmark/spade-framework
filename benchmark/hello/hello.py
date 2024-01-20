@@ -9,7 +9,7 @@ import os
 
 #Podajesz liczbe agentow dla danej iteracji
 DEFAULT_PARAMS = "5:10:20:30"
-DEFAULT_HOST = "localhost"
+DEFAULT_HOST = "server_cnp"
 AGENT_PASSWORD = "123456789"
 AGENT_BASE_JID = "helloWorldAgent"
 

@@ -145,7 +145,8 @@ async def main():
   number_of_contractors = number_of_contractors.split(":")
   if_elapsed_with_agent_creations = sys.argv[2] if args_length > 1 else DEFAULT_IF_ELAPSED_WITH_CREATION_AGENT
   if_elapsed_with_agent_creations = True if if_elapsed_with_agent_creations == 'True' else False
-  host = sys.argv[2] if args_length > 2 else DEFAULT_HOST
+  # host = sys.argv[2] if args_length > 2 else DEFAULT_HOST
+  host = "server_cnp"
 
   elapsed_times = []
 
