@@ -9,7 +9,7 @@ import datetime
 import os
 
 DEFAULT_MAX_RECEIVE_LIMIT = "100:200:500:1000"
-DEFAULT_HOST = "localhost"
+DEFAULT_HOST = "server_messaging"
 AGENT_PASSWORD = "123456789"
 SENDER_AGENT_JID = "sender_agent"
 COUNTER_AGENT_JID = "counter_agent"

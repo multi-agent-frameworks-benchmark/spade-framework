@@ -6,4 +6,4 @@ COPY . /app
 
 RUN pip install spade
 
-CMD python main.py
+CMD python messaging.py
