@@ -6,7 +6,7 @@ from spade.message import Message
 import time
 import csv
 import datetime
-
+import os
 
 DEFAULT_MAX_RECEIVE_LIMIT = "100:200:500:1000"
 DEFAULT_HOST = "localhost"
@@ -157,12 +157,22 @@ async def main():
     elapsed = time.perf_counter() - start
     elapsed_times.append([int(i), elapsed])
 
+  current_directory = os.getcwd()
+
+  target_directory = os.path.abspath(os.path.join(current_directory, '..', '..'))
+
+  benchmark_results_directory = os.path.join(target_directory, 'benchmark-results')
+  os.makedirs(benchmark_results_directory, exist_ok=True)
+
   date_run = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M")
-  with open(f"{date_run}-benchmark-result-messaging.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow(["Iteration", "Elapsed time"])
-    for [iter, elapsed_time] in elapsed_times:
-        writer.writerow([str(iter), str(elapsed_time)])
+  file_path = os.path.join(benchmark_results_directory, f"{date_run}-benchmark-result-contract-net-protocol.csv")
+
+  # Open the file in the specified directory
+  with open(file_path, "w", newline="") as f:
+      writer = csv.writer(f)
+      writer.writerow(["Iteration", "Elapsed time"])
+      for [iter, elapsed_time] in elapsed_times:
+          writer.writerow([str(iter), str(elapsed_time)])
     
 if __name__ == "__main__":
     spade.run(main())
