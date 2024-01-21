@@ -1,3 +1,5 @@
+source benchmark-settings.config
+
 # Create setup for hello benchmark
 
 cd benchmark/hello
