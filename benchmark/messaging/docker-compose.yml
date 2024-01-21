@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  server_messaging:
+    image: tigase/tigase-xmpp-server:8.1.2
+    ports:
+      - "8070:8080"
+      - "5333:5222"
+    environment:
+      - DB_ROOT_USER=admin
+      - DB_ROOT_PASS=admin
+      - ADMIN_JID=admin@server_cnp
+      - ADMIN_PASSWORD=admin
+    volumes:
+      - ./tigase/config/tigase.conf:/home/tigase/tigase-server/etc/tigase.conf
+      - ./tigase/config/config.tdsl:/home/tigase/tigase-server/etc/config.tdsl
+
+  spade_messaging:
+    image: spade_messaging:latest
+    deploy:
+      resources:
+        limits:
+          cpus: ${CPUS}
+          memory: ${MEMORY}
