@@ -8,7 +8,7 @@ import csv
 import datetime
 import os
 
-DEFAULT_MAX_RECEIVE_LIMIT = "100:200:500:1000"
+DEFAULT_MAX_RECEIVE_LIMIT = "100:200:300:400:500:1000:1500:2000:2500:3500:5000:7000:8750:10000"
 DEFAULT_HOST = "server_messaging"
 AGENT_PASSWORD = "123456789"
 SENDER_AGENT_JID = "sender_agent"
@@ -116,7 +116,9 @@ class Sender(Agent):
     async def handle_received_message(self, msg: Message):
       value = int(msg.body)
       self.current_value = value
+      
       print(f"Sender Agent {str(self.agent.jid)} received {str(value)}")
+
       if value >= self.max_limit:
         await self.handle_value_limit_reached()
 
@@ -145,7 +147,7 @@ async def main():
 
   args_length = len(sys.argv) - 1
 
-  max_limit = sys.argv[1] if args_length > 0 else DEFAULT_MAX_RECEIVE_LIMIT
+  max_limit = DEFAULT_MAX_RECEIVE_LIMIT
   max_limit = max_limit.split(":")
   host = sys.argv[2] if args_length > 1 else DEFAULT_HOST
   
@@ -157,22 +159,22 @@ async def main():
     elapsed = time.perf_counter() - start
     elapsed_times.append([int(i), elapsed])
 
-  current_directory = os.getcwd()
+    current_directory = os.getcwd()
 
-  target_directory = os.path.abspath(os.path.join(current_directory, '..', '..'))
+    target_directory = os.path.abspath(os.path.join(current_directory, '..', '..'))
 
-  benchmark_results_directory = os.path.join(target_directory, 'benchmark-results')
-  os.makedirs(benchmark_results_directory, exist_ok=True)
+    benchmark_results_directory = os.path.join(target_directory, 'benchmark-results')
+    os.makedirs(benchmark_results_directory, exist_ok=True)
 
-  date_run = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M")
-  file_path = os.path.join(benchmark_results_directory, f"{date_run}-benchmark-result-contract-net-protocol.csv")
+    date_run = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M")
+    file_path = os.path.join(benchmark_results_directory, f"{date_run}-benchmark-messaging-spade.csv")
 
-  # Open the file in the specified directory
-  with open(file_path, "w", newline="") as f:
-      writer = csv.writer(f)
-      writer.writerow(["Iteration", "Elapsed time"])
-      for [iter, elapsed_time] in elapsed_times:
-          writer.writerow([str(iter), str(elapsed_time)])
+    # Open the file in the specified directory
+    with open(file_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["Iteration", "Elapsed time"])
+        for [iter, elapsed_time] in elapsed_times:
+            writer.writerow([str(iter), str(elapsed_time)])
     
 if __name__ == "__main__":
     spade.run(main())

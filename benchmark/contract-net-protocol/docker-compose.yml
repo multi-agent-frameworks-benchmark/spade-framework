@@ -15,7 +15,7 @@ services:
       - ./tigase/config/config.tdsl:/home/tigase/tigase-server/etc/config.tdsl
 
   spade_cnp:
-    image: spade:latest
+    image: spade_cnp:latest
     deploy:
       resources:
         limits:

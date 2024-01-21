@@ -10,7 +10,7 @@ import csv
 import datetime
 import os
 
-DEFAULT_NUMBER_OF_CONTRACTORS = "2:4:8"
+DEFAULT_NUMBER_OF_CONTRACTORS = "100:200:300:400:500:1000"
 DEFAULT_IF_ELAPSED_WITH_CREATION_AGENT = "True"
 DEFAULT_HOST = "server_cnp"
 AGENT_PASSWORD = "123456789"
@@ -141,35 +141,34 @@ async def main():
 
   args_length = len(sys.argv) - 1
 
-  number_of_contractors = sys.argv[1] if args_length > 0 else DEFAULT_NUMBER_OF_CONTRACTORS
+  number_of_contractors = DEFAULT_NUMBER_OF_CONTRACTORS
+  print(number_of_contractors)
   number_of_contractors = number_of_contractors.split(":")
   if_elapsed_with_agent_creations = sys.argv[2] if args_length > 1 else DEFAULT_IF_ELAPSED_WITH_CREATION_AGENT
   if_elapsed_with_agent_creations = True if if_elapsed_with_agent_creations == 'True' else False
-  # host = sys.argv[2] if args_length > 2 else DEFAULT_HOST
-  host = "server_cnp"
+  host = sys.argv[2] if args_length > 2 else DEFAULT_HOST
 
   elapsed_times = []
 
   for i in number_of_contractors:
     elapsed = await execute_benchmark_path(int(i), if_elapsed_with_agent_creations, host)
     elapsed_times.append([int(i), elapsed])
-  
-  current_directory = os.getcwd()
+    current_directory = os.getcwd()
 
-  target_directory = os.path.abspath(os.path.join(current_directory, '..', '..'))
+    target_directory = os.path.abspath(os.path.join(current_directory, '..', '..'))
 
-  benchmark_results_directory = os.path.join(target_directory, 'benchmark-results')
-  os.makedirs(benchmark_results_directory, exist_ok=True)
+    benchmark_results_directory = os.path.join(target_directory, 'benchmark-results')
+    os.makedirs(benchmark_results_directory, exist_ok=True)
 
-  date_run = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M")
-  file_path = os.path.join(benchmark_results_directory, f"{date_run}-benchmark-result-contract-net-protocol.csv")
+    date_run = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M")
+    file_path = os.path.join(benchmark_results_directory, f"{date_run}-benchmark-result-contract-net-protocol-spade.csv")
 
-  # Open the file in the specified directory
-  with open(file_path, "w", newline="") as f:
-      writer = csv.writer(f)
-      writer.writerow(["Iteration", "Elapsed time"])
-      for [iter, elapsed_time] in elapsed_times:
-          writer.writerow([str(iter), str(elapsed_time)])
+    # Open the file in the specified directory
+    with open(file_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["Iteration", "Elapsed time"])
+        for [iter, elapsed_time] in elapsed_times:
+            writer.writerow([str(iter), str(elapsed_time)])
 
 
 if __name__ == "__main__":
